@@ -16,7 +16,7 @@ class wavelet_transform():
     def transform(self, data):
 
         #Unwrap data from tensor and compute wavelet transform
-        coeffs = pywt.dwt2(data.numpy(), self.wavelet_name)
+        coeffs = pywt.dwt2(data.cpu().numpy(), self.wavelet_name)
 
 
         #Create a 3 dimensional tensor, where each output coefficients array is stacked
