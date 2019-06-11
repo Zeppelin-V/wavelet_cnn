@@ -17,7 +17,7 @@ def get_model(model_name, computing_device, wvlt_transform):
     elif (model_name == "WaveletCNN"):
         model = cnn.waveletCNN(wvlt_transform)
         model = model.to(computing_device)
-        print("Model on CUDA?", next(model.paramaters()).is_cuda)
+        print("Model on CUDA?", next(model.parameters()).is_cuda)
         return model
 
     return 0
