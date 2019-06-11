@@ -18,9 +18,9 @@ class ImageDataset(Dataset):
 
         self.transform = transform
         self.color = color
-        self.image_dir = "/home/zeppelin/PycharmProjects/math179final/101_ObjectCategories/"
+        self.image_dir = "/101_ObjectCategories/"
         self.image_info = pd.read_csv(
-            "/home/zeppelin/PycharmProjects/math179final/image_labels.csv")
+            "image_labels.csv")
         self.image_filenames = self.image_info["name"]
         self.labels = self.image_info["labels"]
         self.classes = self.labels.tolist()
