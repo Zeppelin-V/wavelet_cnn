@@ -267,7 +267,7 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
 
 def init(seed):
     # Setup the transform
-    transform = transforms.Compose([transforms.ToTensor])
+    transform = transforms.Compose([transforms.ToTensor()])
 
     # Check if the system supports CUDA
     use_cuda = torch.cuda.is_available()
