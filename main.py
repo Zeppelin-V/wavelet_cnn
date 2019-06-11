@@ -1,6 +1,7 @@
 import train
 from config import config
 
+#Dispatch function
 def run():
 
 
@@ -10,7 +11,7 @@ def run():
 
         train.train(config['model_name'], seed, computing_device,
                     config['num_epochs'], config['k'], config['learning_rate'], config['batch_size'],
-                    config['num_mb'], config['wvlt_name'], config['p_test'], transform, extras, config['outname'])
+                    config['num_mb'], config['wvlt_transform'], config['p_test'], transform, extras, config['outname'])
 
     else:
 

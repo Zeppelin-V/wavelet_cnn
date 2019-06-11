@@ -29,10 +29,10 @@ class waveletCNN(nn.Module):
 
         #Define the k2 set of convolutions
         self.convk2a = nn.Conv2d(in_channels=136, out_channels=128, kernel_size=3, padding=1)
-        self.convk2a_normed = nn.BatchNorm2d(136)
+        self.convk2a_normed = nn.BatchNorm2d(128)
         torch_init.xavier_normal_(self.convk2a.weight)
         self.convk2b = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, padding=1,stride=2)
-        self.convk2b_normed = nn.BatchNorm2d(136)
+        self.convk2b_normed = nn.BatchNorm2d(128)
         torch_init.xavier_normal_(self.convk2b.weight)
 
         #Dfine the k3 set of convolutions
@@ -88,7 +88,7 @@ class waveletCNN(nn.Module):
 
         #Define first fully connected layer
         self.fc1 = nn.Linear(in_features=1*1*652, out_features=256)
-        self.fc1_normed = nn.BatchNorm1d(128)
+        self.fc1_normed = nn.BatchNorm1d(256)
         torch_init.xavier_normal_(self.fc1.weight)
 
         #Define second fully connected layer
