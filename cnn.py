@@ -156,22 +156,18 @@ class waveletCNN(nn.Module):
 
         fc_batch = self.fc2(fc_batch)
 
-        return func.sigmoid(fc_batch)
+        return self.fc2(fc_batch)
 
 
+    def num_flat_features(self, inputs):
+        #Get the dimensions of the layers excluding the inputs
+        size = inputs.size()[1:]
 
+        #Track the number of features
+        num_features = 1
 
+        for s in size:
 
+            num_features *= s
 
-
-
-
-
-
-
-
-
-
-
-
-
+        return num_features
