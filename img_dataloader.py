@@ -18,7 +18,7 @@ class ImageDataset(Dataset):
 
         self.transform = transform
         self.color = color
-        self.image_dir = "/101_ObjectCategories/"
+        self.image_dir = "101_ObjectCategories/"
         self.image_info = pd.read_csv(
             "image_labels.csv")
         self.image_filenames = self.image_info["name"]
