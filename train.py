@@ -3,10 +3,12 @@ from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as func
 import torch.nn.init as torch_init
+import torchvision.transforms as transforms
 import torch.optim as optim
 import numpy as np
 import cnn
 import img_dataloader
+import wavelet
 
 
 def get_model(model_name, computing_device, wvlt_transform):
@@ -283,5 +285,111 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
             return 0
 
 
+
+
+
+
+def init(seed):
+
+    #Setup the transform
+    transform = transforms.Compose([transforms.ToTensor])
+
+    #Check if the system supports CUDA
+    use_cuda = torch.cuda.is_available()
+
+    #Setup GPU optimization if CUDA is supported
+    if use_cuda:
+        computing_device = torch.device("cuda")
+        extras = {"num_workers": 1, "pin_memory": True}
+        print("Cuda is supported")
+    else: #Otherwise train on the CPU  :(
+        computing_device = torch.device("cpu")
+        extras = False
+        print("CUDA NOT supported")
+
+    #Init the seed
+    np_seed = np.random.seed(seed)
+
+    return transform, computing_device, extras, np_seed
+
+#Meta function for launching the training process
+def train(model_name, seed, computing_device, num_epochs, k, learning_rate, batch_size, num_mb,
+          wvlt_name, p_test, transform, extras, outname):
+
+
+    #Create the test loader and the training indices
+    test_loader, train_indices = img_dataloader.create_train_test_loader(batch_size, seed, transform,
+                                                                         p_test, extras=extras)
+
+    #Create the set of (val_indices, train_indices) pairs for each validation subset
+    val_subset_ind = img_dataloader.get_validation_indices(train_indices, k)
+
+    #Create a wavelet transform object
+    wvlt_transform = wavelet.wavelet_transform(wvlt_name, computing_device)
+
+    #Train the model
+    accuracy_metrics = train_model(model_name, computing_device, val_subset_ind, num_epochs, k,
+                                   learning_rate, batch_size, num_mb, wvlt_transform, transform, extras)
+
+    #Output accuracy metrics to an outfile
+    output_metrics(accuracy_metrics, outname)
+
+
+#Function for outputing metrics to a file
+def output_metrics(accuracy_metrics, outname):
+
+    c = np.array([])
+    file_name = outname + ".txt"
+    file = open(file_name, "w")
+    print(len(accuracy_metrics))
+    for i in range(len(accuracy_metrics)):
+        if i == 0 or i == 1 or i ==2:
+            val = "validation data\n"
+            file.write(val)
+        else:
+            train = "train data\n"
+            file.write(train)
+
+        if i % 3 == 0:
+            total = " total\n"
+            file.write(total)
+        elif i % 3 == 1:
+            avg = " avg_minibatch\n"
+            file.write(avg)
+        elif i % 3 == 2:
+            acc = " accuracy\n"
+            file.write(acc)
+
+
+        for split_num in range(len(accuracy_metrics[i])):
+
+            file.write("Split num: " + str(split_num) + "\n")
+
+            for epoch in range(len(accuracy_metrics[i][split_num])):
+
+                file.write("Epoch num: " + str(epoch) + "\n")
+
+                for val in range(len(accuracy_metrics[i][split_num][epoch])):
+
+                    if isinstance(accuracy_metrics[i][split_num][epoch][val], torch.Tensor):
+                        file.write(str(accuracy_metrics[i][split_num][epoch][val].item()))
+                    else:
+                        file.write(str(accuracy_metrics[i][split_num][epoch][val]))
+                    if val != (len(accuracy_metrics[i][split_num][epoch]) - 1):
+                        file.write(", ")
+
+                file.write("\n")
+
+            file.write("\n")
+
+        file.write("\n")
+
+    return 0
+
+
+#TODO: Implement test meta function
+def test():
+
+    return 0
 
 

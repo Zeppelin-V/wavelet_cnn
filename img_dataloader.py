@@ -47,7 +47,7 @@ class ImageDataset(Dataset):
 
         #Verify that image is in  Tensor format
         if type(image) is not torch.Tensor:
-            image = transform.ToTensor()(image)
+            image = transforms.ToTensor()(image)
 
         #Convert multi-class label into binary encoding
         label = self.convert_label(self.labels[ind], self.classes)
@@ -138,13 +138,13 @@ def get_validation_indices(train_indices, k):
 
     #Get a list of (val_indices, train_ind) for each validation subset
     val_indices = []
-    for i in rnage(0, k):
+    for i in range(0, k):
 
         subset_start = int(i * val_subset_size)
         subset_end = int((i+1) * val_subset_size)
 
-        val_subset_ind = train_ind[subset_start:subset_end]
-        train_subset_ind = train_ind[:subset_start] + train_ind[subset_end:]
+        val_subset_ind = train_indices[subset_start:subset_end]
+        train_subset_ind = train_indices[:subset_start] + train_indices[subset_end:]
 
         val_indices.append((val_subset_ind, train_subset_ind))
 
@@ -163,7 +163,7 @@ def create_k_split_dataloaders(val_indices, batch_size, kth_index, transform=tra
     #Get the validatoin set indices and the train set indices
     val_train_set = val_indices[kth_index]
     val_ind = val_train_set[0]
-    train_ind = val_train_ind[1]
+    train_ind = val_train_set[1]
 
 
     #Use the subset random sampler as the sampler for each dataset
@@ -178,7 +178,7 @@ def create_k_split_dataloaders(val_indices, batch_size, kth_index, transform=tra
         pin_memory = extras["pin_memory"]
 
     #Define the dataloaders for the validation and train sets
-    val_loader = Dataloader(dataset, batch_size=batch_size, sampler=sample_val,
+    val_loader = DataLoader(dataset, batch_size=batch_size, sampler=sample_val,
                             num_workers=num_workers, pin_memory=pin_memory)
 
     train_loader = DataLoader(dataset, batch_size=batch_size, sampler=sample_train,
