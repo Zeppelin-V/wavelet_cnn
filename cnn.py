@@ -161,8 +161,6 @@ class waveletCNN(nn.Module):
 
         print("After fc1: ", fc_batch.shape)
 
-        fc_batch = self.fc2(fc_batch)
-
         return self.fc2(fc_batch)
 
 
