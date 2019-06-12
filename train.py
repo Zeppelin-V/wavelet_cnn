@@ -87,8 +87,6 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
 
                 # Perform the forward pass through the network and compute the loss
                 output = model(images)
-                print(labels.shape)
-                print(output.shape)
                 loss_tensor = criterion(output, labels)
 
                 # Backpropogate XD
@@ -117,10 +115,9 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
 
                     softmax_output = logsoftmax(output)
                     predicted_labels = torch.argmax(softmax_output, dim=1)
-                    print(predicted_labels.shape)
 
                     train_acc = (torch.sum(labels.eq(predicted_labels), dim=0).cpu().long())
-                    avg_acc = torch.mean((train_acc.to(dtype=torch.float) / (len(softmax_output))).float())
+                    avg_acc = torch.mean((train_acc.to(dtype=torch.float) / (len(predicted_labels))).float())
                     train_accuracy.append(avg_acc)
 
             # Add this to the list of average training minibatch loss to list for all val/training splits
@@ -162,9 +159,10 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
                     N_minibatch_loss = 0.0
 
                     softmax_output = logsoftmax(output)
+                    predicted_labels = torch.argmax(softmax_output, dim=1)
 
-                    val_acc = (torch.sum(labels.eq(softmax_output), dim=0).cpu().long())
-                    avg_acc = torch.mean((val_acc.to(dtype=torch.float) / (len(softmax_output))).float())
+                    val_acc = (torch.sum(labels.eq(predicted_labels), dim=0).cpu().long())
+                    avg_acc = torch.mean((val_acc.to(dtype=torch.float) / (len(predicted_labels))).float())
                     val_accuracy.append(avg_acc)
 
             # Add loss lists for validation data to list of all possible losses
