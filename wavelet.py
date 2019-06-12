@@ -21,10 +21,10 @@ class wavelet_transform():
 
         #Create a 3 dimensional tensor, where each output coefficients array is stacked
         #Ordering is LL, LH, HL HH
-        coeffs_var =  torch.stack((torch.unsqueeze(torch.Tensor(coeffs[0]).to(self.computing_device), 2),
-                            torch.unsqueeze(torch.Tensor(coeffs[1][0]).to(self.computing_device), 2),
-                            torch.unsqueeze(torch.Tensor(coeffs[1][1]).to(self.computing_device), 2),
-                            torch.unsqueeze(torch.Tensor(coeffs[1][2]).to(self.computing_device), 2)), dim=2)
+        coeffs_var =  torch.stack(torch.Tensor(coeffs[0]).to(self.computing_device),
+                            torch.Tensor(coeffs[1][0]).to(self.computing_device),
+                            torch.Tensor(coeffs[1][1]).to(self.computing_device),
+                            torch.Tensor(coeffs[1][2]).to(self.computing_device), dim=2)
 
         print(coeffs_var.shape)
 
