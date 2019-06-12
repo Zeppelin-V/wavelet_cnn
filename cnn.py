@@ -133,7 +133,7 @@ class waveletCNN(nn.Module):
         cvs2_batch = func.relu(self.convs2_normed(self.convs2(cvk1_dense_batch)))
 
         #Apply the 3rd wavelet transform
-        wvlt3_batch = self.wvlt_transform.batch_transform(wvlt2_batch[:,:,:,0])
+        wvlt3_batch = self.wvlt_transform.batch_transform(wvlt2_batch[:,0,:,:])
 
         #Apply the k2.5 convolution layers
         cvk25a_batch = func.relu(self.convk25a_normed(self.convk25a(wvlt3_batch)))
@@ -150,7 +150,7 @@ class waveletCNN(nn.Module):
 
         cvs3_batch =func.relu(self.convs3_normed(self.convs3(cvk2_dense_batch)))
 
-        cvk3_dense_batch = torch.cat([cvk3b_batch, cvs3_batch], dim=3)
+        cvk3_dense_batch = torch.cat([cvk3b_batch, cvs3_batch], dim=1)
 
         fc_batch = self.pool(cvk3_dense_batch)
 
