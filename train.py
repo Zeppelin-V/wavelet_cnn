@@ -36,6 +36,9 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
     # Define the loss criterion and instantiate the gradient descent optimizer
     criterion = nn.CrossEntropyLoss()
 
+    #Define LogSoftmax object to compute predicted labels for acuaracy assessment
+    logsoftmax = nn.LogSoftmax(dim=1)
+
     # Iterate through every possible validation/training split
     for i in range(0, k):
 
@@ -98,6 +101,8 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
                 train_total_loss.append(loss_tensor.item())
                 N_minibatch_loss += loss_tensor
 
+
+
                 # Calculate avg_minibatch loss
                 if minibatch_count % N == 0:
                     # Print the loss averaged over the last N mini-batches
@@ -110,8 +115,10 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
 
                     N_minibatch_loss = 0.0
 
-                    train_acc = (torch.sum(labels.eq(output), dim=0).cpu().long())
-                    avg_acc = torch.mean((train_acc.to(dtype=torch.float) / (len(output))).float())
+                    softmax_output = logsoftmax(output)
+
+                    train_acc = (torch.sum(labels.eq(softmax_output), dim=0).cpu().long())
+                    avg_acc = torch.mean((train_acc.to(dtype=torch.float) / (len(softmax_output))).float())
                     train_accuracy.append(avg_acc)
 
             # Add this to the list of average training minibatch loss to list for all val/training splits
@@ -152,8 +159,10 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
 
                     N_minibatch_loss = 0.0
 
-                    val_acc = (torch.sum(labels.eq(output), dim=0).cpu().long())
-                    avg_acc = torch.mean((val_acc.to(dtype=torch.float) / (len(output))).float())
+                    softmax_output = logsoftmax(output)
+
+                    val_acc = (torch.sum(labels.eq(softmax_output), dim=0).cpu().long())
+                    avg_acc = torch.mean((val_acc.to(dtype=torch.float) / (len(softmax_output))).float())
                     val_accuracy.append(avg_acc)
 
             # Add loss lists for validation data to list of all possible losses
