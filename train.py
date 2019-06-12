@@ -317,7 +317,7 @@ def train(model_name, seed, computing_device, num_epochs, k, learning_rate, batc
                                    learning_rate, batch_size, num_mb, wvlt_transform, transform, extras)
 
     # Output accuracy metrics to an outfile
-    output_metrics(accuracy_metrics, outname)
+    output_metrics(accuracy_metrics, str(outname + "_" + wvlt_name + "_" + num_epochs + "_"+ learning_rate))
 
 
 # Function for outputing metrics to a file
