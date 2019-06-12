@@ -92,7 +92,7 @@ class waveletCNN(nn.Module):
         torch_init.xavier_normal_(self.fc1.weight)
 
         #Define second fully connected layer
-        self.fc2 = nn.Linear(in_features=128, out_features=14).cuda()
+        self.fc2 = nn.Linear(in_features=128, out_features=10).cuda()
         torch_init.xavier_normal_(self.fc2.weight)
 
 
