@@ -38,7 +38,11 @@ class wavelet_transform():
 
         print(batch_transf.shape)
 
-        return batch_transf
+        squeezed_batch_trans = torch.squeeze(batch_transf)
+        print(squeezed_batch_trans.shape)
+
+
+        return squeezed_batch_trans
 
 
 
