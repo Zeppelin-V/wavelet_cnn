@@ -123,7 +123,7 @@ class waveletCNN(nn.Module):
         print(cvs1_batch.shape)
         print(cvk15_batch.shape)
         print(cvs15_batch.shape)
-        cvk1_dense_batch = torch.cat([cvk1b_batch, cvs1_batch, cvk15_batch, cvs15_batch], dim=2)
+        cvk1_dense_batch = torch.cat([cvk1b_batch, cvs1_batch, cvk15_batch, cvs15_batch], dim=1)
 
         #Apply the k2 convolution layers
         cvk2a_batch = func.relu(self.convk2a_normed(self.convk2a(cvk1_dense_batch)))
