@@ -21,11 +21,14 @@ class wavelet_transform():
 
         #Create a 3 dimensional tensor, where each output coefficients array is stacked
         #Ordering is LL, LH, HL HH
-        return torch.stack((torch.unsqueeze(torch.Tensor(coeffs[0]).to(self.computing_device), 2),
+        coeffs_var =  torch.stack((torch.unsqueeze(torch.Tensor(coeffs[0]).to(self.computing_device), 2),
                             torch.unsqueeze(torch.Tensor(coeffs[1][0]).to(self.computing_device), 2),
                             torch.unsqueeze(torch.Tensor(coeffs[1][1]).to(self.computing_device), 2),
                             torch.unsqueeze(torch.Tensor(coeffs[1][2]).to(self.computing_device), 2)), dim=2)
 
+        print(coeffs_var.shape)
+
+        return coeffs_var
 
     #Apply the wavelet transform over an image batch
     #Returns a 4D Torch tensor of dimensions [batch_size x height x width x filter_dim]
