@@ -119,10 +119,6 @@ class waveletCNN(nn.Module):
         cvs15_batch = func.relu(self.convs15_normed(self.convs15(wvlt2_batch)))
 
         #Concatenate output of k1, s1, k1.5, and s1.5
-        print(cvk1b_batch.shape)
-        print(cvs1_batch.shape)
-        print(cvk15_batch.shape)
-        print(cvs15_batch.shape)
         cvk1_dense_batch = torch.cat([cvk1b_batch, cvs1_batch, cvk15_batch, cvs15_batch], dim=1)
 
         #Apply the k2 convolution layers
@@ -151,10 +147,15 @@ class waveletCNN(nn.Module):
         cvs3_batch =func.relu(self.convs3_normed(self.convs3(cvk2_dense_batch)))
 
         cvk3_dense_batch = torch.cat([cvk3b_batch, cvs3_batch], dim=1)
+        print("Prepool: ", cvk3_dense_batch.shape)
 
         fc_batch = self.pool(cvk3_dense_batch)
 
+        print("Postpool: ", fc_batch.shape)
+
         fc_batch = fc_batch.view(-1, self.num_flat_features(fc_batch))
+
+        print("Post flatten: ", fc_batch.shape)
 
         fc_batch = func.relu(self.fc1_normed(self.fc1(fc_batch)))
 
