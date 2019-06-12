@@ -84,6 +84,8 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
 
                 # Perform the forward pass through the network and compute the loss
                 output = model(images)
+                print(labels.shape)
+                print(output.shape)
                 loss_tensor = criterion(output, labels)
 
                 # Backpropogate XD
