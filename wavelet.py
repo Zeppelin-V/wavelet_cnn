@@ -21,28 +21,17 @@ class wavelet_transform():
 
         #Create a 3 dimensional tensor, where each output coefficients array is stacked
         #Ordering is LL, LH, HL HH
-        coeffs_var =  torch.stack((torch.Tensor(coeffs[0]).to(self.computing_device),
+        return torch.stack((torch.Tensor(coeffs[0]).to(self.computing_device),
                             torch.Tensor(coeffs[1][0]).to(self.computing_device),
                             torch.Tensor(coeffs[1][1]).to(self.computing_device),
                             torch.Tensor(coeffs[1][2]).to(self.computing_device)), dim=0)
 
-        print(coeffs_var.shape)
-
-        return coeffs_var
 
     #Apply the wavelet transform over an image batch
     #Returns a 4D Torch tensor of dimensions [batch_size x height x width x filter_dim]
     def batch_transform(self, batch):
 
-        batch_transf = torch.stack(list(map(self.transform, torch.unbind(batch, 0))), dim=0)
-
-        print(batch_transf.shape)
-
-        squeezed_batch_trans = torch.squeeze(batch_transf)
-        print(squeezed_batch_trans.shape)
-
-
-        return squeezed_batch_trans
+        return torch.squeeze(torch.stack(list(map(self.transform, torch.unbind(batch, 0))), dim=0))
 
 
 
