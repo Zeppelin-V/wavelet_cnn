@@ -55,7 +55,7 @@ class waveletCNN(nn.Module):
         self.convk25a_normed = nn.BatchNorm2d(64)
         torch_init.xavier_normal_(self.convk25a.weight)
         self.convk25b = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
-        self.convk25a_normed = nn.BatchNorm2d(128)
+        self.convk25b_normed = nn.BatchNorm2d(128)
         torch_init.xavier_normal_(self.convk25b.weight)
 
 
