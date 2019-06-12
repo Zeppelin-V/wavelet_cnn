@@ -143,7 +143,7 @@ class waveletCNN(nn.Module):
         cvs25_batch = func.relu(self.convs25_normed(self.convs25(wvlt3_batch)))
 
         #Concatenate output of k2, s2, k2.5, and s2.5
-        cvk2_dense_batch = torch.cat([cvk2b_batch, cvs2_batch, cvk25b_batch, cvs25_batch], dim=3)
+        cvk2_dense_batch = torch.cat([cvk2b_batch, cvs2_batch, cvk25b_batch, cvs25_batch], dim=1)
 
         cvk3a_batch = func.relu(self.convk3a_normed(self.convk3a(cvk2_dense_batch)))
         cvk3b_batch = func.relu(self.conv3kb_normed(self.conv3kb(cvk3a_batch)))
