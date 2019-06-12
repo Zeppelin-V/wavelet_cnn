@@ -23,7 +23,7 @@ class ImageDataset(Dataset):
             "image_labels.csv")
         self.image_filenames = self.image_info["name"]
         self.labels = self.image_info["labels"]
-        self.classes = self.labels.tolist()
+        self.classes = list(set(self.labels.tolist()))
 
     def __len__(self):
 
