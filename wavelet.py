@@ -31,7 +31,11 @@ class wavelet_transform():
     #Returns a 4D Torch tensor of dimensions [batch_size x height x width x filter_dim]
     def batch_transform(self, batch):
 
-        return torch.stack(list(map(self.transform, torch.unbind(batch, 0))), dim=0)
+        batch_transf = torch.stack(list(map(self.transform, torch.unbind(batch, 0))), dim=0)
+
+        print(batch_transf.shape)
+
+        return batch_transf
 
 
 
