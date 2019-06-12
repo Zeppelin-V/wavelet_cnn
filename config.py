@@ -1,7 +1,7 @@
 config = {
     'model_name': "WaveletCNN",
     'wvlt_transform': 'haar',
-    'num_epochs': 1,
+    'num_epochs': 10,
     'batch_size': 16,
     'learning_rate': 0.00001,
     'num_mb': 50,
