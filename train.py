@@ -116,7 +116,7 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
                     N_minibatch_loss = 0.0
 
                     softmax_output = logsoftmax(output)
-                    predicted_labels = torch.argmax(softmax_output, dim=2)
+                    predicted_labels = torch.argmax(softmax_output, dim=1)
                     print(predicted_labels.shape)
 
                     train_acc = (torch.sum(labels.eq(predicted_labels), dim=0).cpu().long())
