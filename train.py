@@ -178,8 +178,8 @@ def train_model(model_name, computing_device, val_indices, epochs, k, learning_r
         all_train_acc.append(train_epoch_acc)
         all_val_acc.append(val_epoch_acc)
 
-    return (all_val_total_loss, all_train_total_loss, all_val_avg_minibatch_loss, all_train_avg_minibatch_loss,
-            all_val_acc, all_train_total_loss, all_train_avg_minibatch_loss, all_train_acc)
+    return (all_val_total_loss, all_val_avg_minibatch_loss, all_val_acc ,all_train_total_loss,
+            all_train_avg_minibatch_loss, all_train_acc)
 
 
 def test_model(model_name, computing_device, test_loader, train_inidices, epochs, learning_rate, batch_size,
