@@ -87,8 +87,8 @@ class waveletCNN(nn.Module):
         self.pool = nn.AvgPool2d(kernel_size=19)
 
         #Define first fully connected layer
-        self.fc1 = nn.Linear(in_features=1*1*652, out_features=256)
-        self.fc1_normed = nn.BatchNorm1d(256)
+        self.fc1 = nn.Linear(in_features=1*1*652, out_features=128)
+        self.fc1_normed = nn.BatchNorm1d(128)
         torch_init.xavier_normal_(self.fc1.weight)
 
         #Define second fully connected layer
