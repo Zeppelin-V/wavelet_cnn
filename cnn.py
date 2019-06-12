@@ -147,19 +147,12 @@ class waveletCNN(nn.Module):
         cvs3_batch =func.relu(self.convs3_normed(self.convs3(cvk2_dense_batch)))
 
         cvk3_dense_batch = torch.cat([cvk3b_batch, cvs3_batch], dim=1)
-        print("Prepool: ", cvk3_dense_batch.shape)
 
         fc_batch = self.pool(cvk3_dense_batch)
 
-        print("Postpool: ", fc_batch.shape)
-
         fc_batch = fc_batch.view(-1, self.num_flat_features(fc_batch))
 
-        print("Post flatten: ", fc_batch.shape)
-
         fc_batch = func.relu(self.fc1_normed(self.fc1(fc_batch)))
-
-        print("After fc1: ", fc_batch.shape)
 
         return self.fc2(fc_batch)
 
