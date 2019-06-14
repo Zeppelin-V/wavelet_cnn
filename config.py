@@ -1,6 +1,6 @@
 config = {
     'model_name': "WaveletCNN",
-    'wvlt_transform': 'dmey',
+    'wvlt_transform': 'db5',
     'num_epochs': 20,
     'batch_size': 8,
     'learning_rate': 0.0001,
