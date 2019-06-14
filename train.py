@@ -190,6 +190,9 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
     # Define the loss criterion and instantiate the gradient descent optimizer
     criterion = nn.CrossEntropyLoss()
 
+    # Define LogSoftmax object to compute predicted labels for acuaracy assessment
+    logsoftmax = nn.LogSoftmax(dim=1)
+
     # Get a new model for this training split
     model = get_model(model_name, computing_device, wvlt_transform)
 
@@ -201,8 +204,9 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
                                                           show_sample=False, extras=extras)
 
     # Record train_loss and avg_train_mb loss
-    train_total_loss = []
-    avg_train_minibatch_loss = []
+    all_test_total_loss =[]
+    all_test_avg_minibatch_loss = []
+    all_test_acc = []
 
     # Train for x epochs
     for epoch in range(0, epochs):
@@ -232,7 +236,6 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
             optimizer.step()
 
             # Add this iteration's loss to the total_loss
-            train_total_loss.append(loss.item())
             N_minibatch_loss += loss
 
             if minibatch_count % N == 0:
@@ -241,14 +244,13 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
                 print("Epoch ", str(epoch + 1), " avg minibatch # ", minibatch_count, " loss: ", N_minibatch_loss)
 
                 # Add the averaged loss over N_minibatches and reset the counter
-                avg_train_minibatch_loss.append(N_minibatch_loss)
-
                 N_minibatch_loss = 0.0
 
         N_minibatch_loss = 0.0
 
         test_total_loss = []
         test_avg_minibatch_loss = []
+        test_accuracy = []
 
         # Iterate through testing minibatches
         for minibatch_count, (images, labels) in enumerate(test_loader, 0):
@@ -274,9 +276,21 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
 
                 N_minibatch_loss = 0.0
 
-            # TODO: Implement the accuracy/loss metrics for testing the model
+                softmax_output = logsoftmax(output)
+                predicted_labels = torch.argmax(softmax_output, dim=1)
 
-            return 0
+                test_acc = (torch.sum(labels.eq(predicted_labels), dim=0).cpu().long())
+                avg_acc = torch.mean((test_acc.to(dtype=torch.float) / (len(predicted_labels))).float())
+                test_accuracy.append(avg_acc)
+
+
+        #Add loss lists for test data to list of all possible losses
+        all_test_total_loss.append(test_total_loss)
+        all_test_avg_minibatch_loss.append(test_avg_minibatch_loss)
+        all_test_acc.append(test_accuracy)
+
+
+    return (all_test_total_loss, all_test_avg_minibatch_loss, all_test_avg_minibatch_loss)
 
 
 def init(seed):
@@ -320,17 +334,20 @@ def train(model_name, seed, computing_device, num_epochs, k, learning_rate, batc
                                    learning_rate, batch_size, num_mb, wvlt_transform, transform, extras)
 
     # Output accuracy metrics to an outfile
-    output_metrics(accuracy_metrics, str(outname) + "_" + str(wvlt_name) + "_" + str(num_epochs) + "_"+ str(learning_rate))
+    output_metrics(accuracy_metrics, str(outname) + "_" + str(wvlt_name) + "_" + str(num_epochs) + "_"+ str(learning_rate), False)
 
 
 # Function for outputing metrics to a file
-def output_metrics(accuracy_metrics, outname):
+def output_metrics(accuracy_metrics, outname, test):
     c = np.array([])
     file_name = outname + ".txt"
     file = open(file_name, "w")
     print(len(accuracy_metrics))
     for i in range(len(accuracy_metrics)):
-        if i == 0 or i == 1 or i == 2:
+        if test is True:
+            test = "test data\n"
+            file.write(test)
+        elif i == 0 or i == 1 or i == 2:
             val = "validation data\n"
             file.write(val)
         else:
@@ -373,6 +390,20 @@ def output_metrics(accuracy_metrics, outname):
     return 0
 
 
-# TODO: Implement test meta function
-def test():
+#Meta function for launching the testing process
+def test(model_name, seed, computing_device, num_epochs, k, learning_rate, batch_size, num_mb,
+         wvlt_name, p_test, transform, extras, outname):
+
+    test_loader, train_indices = img_dataloader.create_train_test_loader(batch_size, seed, transform,
+                                                                         p_test, extras=extras)
+
+    #Create a wavelet transform object
+    wvlt_transform = wavelet.wavelet_transform(wvlt_name, computing_device)
+
+    #Train model and evaluate on the test data
+    accuracy_metrics = test_model(model_name, computing_device, test_loader, train_indices, num_epochs,
+                                  learning_rate, batch_size, num_mb, wvlt_transform, transform, extras)
+
+    output_metrics(accuracy_metrics,str(outname) + "_" + str(wvlt_name) + "_" + str(num_epochs) + "_"+ str(learning_rate), True)
+
     return 0
