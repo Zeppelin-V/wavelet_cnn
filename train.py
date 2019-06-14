@@ -278,7 +278,7 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
                 N_minibatch_loss = 0.0
 
         #Add loss lists for test data to list of all possible losses
-        average_acc = list(torch.mean((test_accuracy.to(dtype=torch.float) / (len(test_accuracy))).float()))
+        average_acc = list(torch.mean((torch.FloatTensor(test_accuracy).to(dtype=torch.float) / (len(test_accuracy))).float()))
         all_avg_accuracy.append(average_acc)
         all_test_acc.append(test_accuracy)
 
