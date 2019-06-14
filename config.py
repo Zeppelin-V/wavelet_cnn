@@ -1,7 +1,7 @@
 config = {
-    'model_name': "WaveletCNN",
+    'model_name': "BaselineCNN",
     'wvlt_transform': 'coif1',
-    'num_epochs': 20,
+    'num_epochs': 1,
     'batch_size': 8,
     'learning_rate': 0.0001,
     'num_mb': 50,
@@ -9,5 +9,5 @@ config = {
     'k': 2,
     'p_test': 0.1,
     'test': False,
-    'outname': 'train'
+    'outname': 'baseline_train'
 }
