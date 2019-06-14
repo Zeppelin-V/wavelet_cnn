@@ -215,7 +215,7 @@ class baselineCNN(nn.Module):
 
 
         ###Replacement for the 3rd Convolution###
-        self.convk05 = nn.Conv2d(in_channels=1, out_channels=4, kernel_size=2, stride=2)
+        self.convk05 = nn.Conv2d(in_channels=1, out_channels=4, kernel_size=3, padding=1,stride=2)
         self.convk05_normed = nn.BatchNorm2d(4)
         torch_init.xavier_normal_(self.convk05.weight)
 
