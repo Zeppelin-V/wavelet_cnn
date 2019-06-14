@@ -281,7 +281,7 @@ class baselineCNN(nn.Module):
         cvs1_batch = func.relu(self.convs1_normed(self.convs1(cvk0_batch)))
 
         #Apply the second replacement convolution
-        print(cvk0_batch.shape)
+        print(torch.unsqueeze(cvk0_batch[:,0,:,:], dim=1).shape)
         cvk00_batch = func.relu(self.convk00_normed(self.convk00(cvk0_batch[:,0,:,:])))
 
         # Apply the k1.5 convolution layers
