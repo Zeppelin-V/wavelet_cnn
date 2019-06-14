@@ -302,7 +302,7 @@ class baselineCNN(nn.Module):
 
         #Apply the 3rd wavelet transform
         cvk05_batch = func.relu(self.convk05_normed(self.convk05(torch.unsqueeze(cvk00_batch[:,0,:,:], dim=1))))
-        print(cvk05_batch.shape)
+        print(cvk00_batch.shape)
 
         # Apply the k2.5 convolution layers
         cvk25a_batch = func.relu(self.convk25a_normed(self.convk25a(cvk05_batch)))
