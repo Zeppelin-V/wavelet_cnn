@@ -418,9 +418,7 @@ def output_test_metrics(accuracy_metrics, outname):
 
                 file.write("Epoch num: " + str(epoch) + "\n")
 
-                for val in range(len(accuracy_metrics[i][epoch])):
-
-                    file.write(str(accuracy_metrics[i][epoch][val]))
+                file.write(str(accuracy_metrics[i][epoch]))
 
 
 
