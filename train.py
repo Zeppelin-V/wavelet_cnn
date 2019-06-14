@@ -204,8 +204,7 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
                                                           show_sample=False, extras=extras)
 
     # Record train_loss and avg_train_mb loss
-    all_test_total_loss =[]
-    all_test_avg_minibatch_loss = []
+    all_avg_accuracy = []
     all_test_acc = []
 
     # Train for x epochs
@@ -248,8 +247,7 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
 
         N_minibatch_loss = 0.0
 
-        test_total_loss = []
-        test_avg_minibatch_loss = []
+        avgerage_acc = []
         test_accuracy = []
 
         # Iterate through testing minibatches
@@ -263,34 +261,29 @@ def test_model(model_name, computing_device, test_loader, train_inidices, epochs
                 output = model(images)
             loss = criterion(output, labels)
 
-            # Add this iteration's loss to the total_loss
-            test_total_loss.append(loss.item())
+            #Add loss to N_minibatch_loss
             N_minibatch_loss += loss
+
+            softmax_output = logsoftmax(output)
+            predicted_labels = torch.argmax(softmax_output, dim=1)
+
+            test_acc = (torch.sum(labels.eq(predicted_labels), dim=0).cpu().long())
+            avg_acc = torch.mean((test_acc.to(dtype=torch.float) / (len(predicted_labels))).float())
+            test_accuracy.append(avg_acc)
 
             if minibatch_count % N == 0:
                 # Print the loss averaged over the last N minibatches
                 print("Epoch ", str(epoch + 1), " average minibatch # ", minibatch_count, " loss: ", N_minibatch_loss)
 
-                # Add the averaged loss over N minibatches and reset the counter
-                test_avg_minibatch_loss.append(N_minibatch_loss)
-
                 N_minibatch_loss = 0.0
 
-                softmax_output = logsoftmax(output)
-                predicted_labels = torch.argmax(softmax_output, dim=1)
-
-                test_acc = (torch.sum(labels.eq(predicted_labels), dim=0).cpu().long())
-                avg_acc = torch.mean((test_acc.to(dtype=torch.float) / (len(predicted_labels))).float())
-                test_accuracy.append(avg_acc)
-
-
         #Add loss lists for test data to list of all possible losses
-        all_test_total_loss.append(test_total_loss)
-        all_test_avg_minibatch_loss.append(test_avg_minibatch_loss)
+        average_acc = list(torch.mean((test_accuracy.to(dtype=torch.float) / (len(test_accuracy))).float()))
+        all_avg_accuracy.append(average_acc)
         all_test_acc.append(test_accuracy)
 
 
-    return (all_test_total_loss, all_test_avg_minibatch_loss, all_test_avg_minibatch_loss)
+    return (all_avg_accuracy, all_test_acc)
 
 
 def init(seed):
@@ -334,20 +327,17 @@ def train(model_name, seed, computing_device, num_epochs, k, learning_rate, batc
                                    learning_rate, batch_size, num_mb, wvlt_transform, transform, extras)
 
     # Output accuracy metrics to an outfile
-    output_metrics(accuracy_metrics, str(outname) + "_" + str(wvlt_name) + "_" + str(num_epochs) + "_"+ str(learning_rate), False)
+    output_train_metrics(accuracy_metrics, str(outname) + "_" + str(wvlt_name) + "_" + str(num_epochs) + "_"+ str(learning_rate))
 
 
 # Function for outputing metrics to a file
-def output_metrics(accuracy_metrics, outname, test):
+def output_train_metrics(accuracy_metrics, outname):
     c = np.array([])
     file_name = outname + ".txt"
     file = open(file_name, "w")
     print(len(accuracy_metrics))
     for i in range(len(accuracy_metrics)):
-        if test is True:
-            test = "test data\n"
-            file.write(test)
-        elif i == 0 or i == 1 or i == 2:
+        if i == 0 or i == 1 or i == 2:
             val = "validation data\n"
             file.write(val)
         else:
@@ -404,6 +394,43 @@ def test(model_name, seed, computing_device, num_epochs, k, learning_rate, batch
     accuracy_metrics = test_model(model_name, computing_device, test_loader, train_indices, num_epochs,
                                   learning_rate, batch_size, num_mb, wvlt_transform, transform, extras)
 
-    output_metrics(accuracy_metrics,str(outname) + "_" + str(wvlt_name) + "_" + str(num_epochs) + "_"+ str(learning_rate), True)
+    output_test_metrics(accuracy_metrics,str(outname) + "_" + str(wvlt_name) + "_" + str(num_epochs) + "_"+ str(learning_rate))
+
+    return 0
+
+
+def output_test_metrics(accuracy_metrics, outname):
+
+    file_name = outname + ".txt"
+    file = open(file_name, "w")
+    print(len(accuracy_metrics))
+    for i in range(len(accuracy_metrics)):
+        test = "test_data\n"
+        file.write(test)
+
+        if i==0:
+            avg_accuracy = " average accuracy\n"
+            file.write(avg_accuracy)
+        elif i==1:
+            batch_accuracy = " batch accuracy\n"
+            file.write(batch_accuracy)
+
+        for epoch in range(len(accuracy_metrics[i])):
+
+            file.write("Epoch num: " + str(epoch) + "\n")
+
+            for val in range(len(accuracy_metrics[i][epoch])):
+
+                if isinstance(accuracy_metrics[i][epoch][val], torch.Tensor):
+                    file.write(str(accuracy_metrics[i][epoch][val].item()))
+
+                if val != (len(accuracy_metrics[i][epoch]) - 1):
+                    file.write(", ")
+
+            file.write("\n")
+
+        file.write("\n")
+
+    file.write("\n")
 
     return 0
