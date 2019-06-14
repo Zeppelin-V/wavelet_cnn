@@ -281,8 +281,7 @@ class baselineCNN(nn.Module):
         cvs1_batch = func.relu(self.convs1_normed(self.convs1(cvk0_batch)))
 
         #Apply the second replacement convolution
-        print(torch.unsqueeze(cvk0_batch[:,0,:,:], dim=1).shape)
-        cvk00_batch = func.relu(self.convk00_normed(self.convk00(cvk0_batch[:,0,:,:])))
+        cvk00_batch = func.relu(self.convk00_normed(self.convk00(torch.unsqueeze(cvk0_batch[:,0,:,:], dim=1))))
 
         # Apply the k1.5 convolution layers
         cvk15_batch = func.relu(self.convk15a_normed(self.convk15a(cvk00_batch)))
@@ -301,7 +300,7 @@ class baselineCNN(nn.Module):
         cvs2_batch = func.relu(self.convs2_normed(self.convs2(cvk1_dense_batch)))
 
         #Apply the 3rd wavelet transform
-        cvk05_batch = func.relu(self.convk05_normed(self.convk05(cvk00_batch[:,0,:,:])))
+        cvk05_batch = func.relu(self.convk05_normed(self.convk05(torch.unsqueeze(cvk00_batch[:,0,:,:], dim=1))))
 
         # Apply the k2.5 convolution layers
         cvk25a_batch = func.relu(self.convk25a_normed(self.convk25a(cvk05_batch)))
