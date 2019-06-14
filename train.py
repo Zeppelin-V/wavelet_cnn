@@ -414,7 +414,17 @@ def output_test_metrics(accuracy_metrics, outname):
 
             for epoch in range(len(accuracy_metrics[i])):
 
+                print(accuracy_metrics[i])
+
                 file.write("Epoch num: " + str(epoch) + "\n")
+
+                for val in range(len(accuracy_metrics[i][epoch])):
+
+                    file.write(str(accuracy_metrics[i][epoch][val]))
+
+
+
+
         elif i==1:
             batch_accuracy = " batch accuracy\n"
             file.write(batch_accuracy)
