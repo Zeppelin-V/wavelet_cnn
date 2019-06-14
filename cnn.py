@@ -200,7 +200,7 @@ class baselineCNN(nn.Module):
         self.convk2b_normed = nn.BatchNorm2d(128)
         torch_init.xavier_normal_(self.convk2b.weight)
 
-        # Dfine the k3 set of convolutions
+        # Dfine the k3 set of convolutions}
         self.convk3a = nn.Conv2d(in_channels=396, out_channels=256, kernel_size=3, padding=1)
         self.convk3a_normed = nn.BatchNorm2d(256)
         torch_init.xavier_normal_(self.convk3a.weight)
@@ -281,6 +281,7 @@ class baselineCNN(nn.Module):
         cvs1_batch = func.relu(self.convs1_normed(self.convs1(cvk0_batch)))
 
         #Apply the second replacement convolution
+        print(cvk0_batch[:,0,:,:].shape)
         cvk00_batch = func.relu(self.convk00_normed(self.convk00(cvk0_batch[:,0,:,:])))
 
         # Apply the k1.5 convolution layers
