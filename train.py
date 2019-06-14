@@ -13,7 +13,10 @@ import wavelet
 
 def get_model(model_name, computing_device, wvlt_transform):
     if (model_name == "BaselineCNN"):
-        x = 0
+        model = cnn.baselineCNN()
+        model = model.to(computing_device)
+        print("Model on CUDA?", next(model.parameters()).is_cuda)
+        return model
     elif (model_name == "WaveletCNN"):
         model = cnn.waveletCNN(wvlt_transform)
         model = model.to(computing_device)
