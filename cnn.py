@@ -196,7 +196,7 @@ class baselineCNN(nn.Module):
         self.convk2a = nn.Conv2d(in_channels=136, out_channels=128, kernel_size=3, padding=1)
         self.convk2a_normed = nn.BatchNorm2d(128)
         torch_init.xavier_normal_(self.convk2a.weight)
-        self.convk2b = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=2, padding=0, stride=2)
+        self.convk2b = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, padding=1, stride=2)
         self.convk2b_normed = nn.BatchNorm2d(128)
         torch_init.xavier_normal_(self.convk2b.weight)
 
@@ -209,7 +209,7 @@ class baselineCNN(nn.Module):
         torch_init.xavier_normal_(self.convk3b.weight)
 
         ###Replacement for the 2nd Convolution###
-        self.convk00 = nn.Conv2d(in_channels=1, out_channels=4, kernel_size=2, stride=2)
+        self.convk00 = nn.Conv2d(in_channels=1, out_channels=4, kernel_size=3, padding=1, stride=2)
         self.convk00_normed = nn.BatchNorm2d(4)
         torch_init.xavier_normal_(self.convk00.weight)
 
