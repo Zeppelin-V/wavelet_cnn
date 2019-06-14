@@ -1,7 +1,7 @@
 config = {
     'model_name': "WaveletCNN",
     'wvlt_transform': 'db1',
-    'num_epochs':  1,
+    'num_epochs':  20,
     'batch_size': 8,
     'learning_rate': 0.0001,
     'num_mb': 50,
