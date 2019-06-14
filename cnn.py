@@ -238,7 +238,7 @@ class baselineCNN(nn.Module):
         self.convs1_normed = nn.BatchNorm2d(4)
         torch_init.xavier_normal_(self.convs1.weight)
 
-        self.convs2 = nn.Conv2d(in_channels=136, out_channels=136, kernel_size=1, stride=2)
+        self.convs2 = nn.Conv2d(in_channels=136, out_channels=136, kernel_size=3, padding=1, stride=2)
         self.convs2_normed = nn.BatchNorm2d(136)
         torch_init.xavier_normal_(self.convs2.weight)
 
