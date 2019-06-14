@@ -423,12 +423,11 @@ def output_test_metrics(accuracy_metrics, outname):
 
             file.write("Epoch num: " + str(epoch) + "\n")
 
-            for val in range(len(accuracy_metrics[i][epoch])):
+            for val in range(len(accuracy_metrics[i])):
 
-                if isinstance(accuracy_metrics[i][epoch][val], torch.Tensor):
-                    file.write(str(accuracy_metrics[i][epoch][val].item()))
+                file.write(str(accuracy_metrics[i].item()))
 
-                if val != (len(accuracy_metrics[i][epoch]) - 1):
+                if val != (len(accuracy_metrics[i]) - 1):
                     file.write(", ")
 
             file.write("\n")
