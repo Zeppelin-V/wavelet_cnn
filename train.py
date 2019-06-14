@@ -428,8 +428,6 @@ def output_test_metrics(accuracy_metrics, outname):
 
                 for val in range(len(accuracy_metrics[i])):
 
-                    print(accuracy_metrics[i])
-
                     file.write(str(accuracy_metrics[i][epoch][val].item()))
 
                     if val != (len(accuracy_metrics[i]) - 1):
