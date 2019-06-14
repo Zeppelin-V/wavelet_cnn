@@ -291,7 +291,6 @@ class baselineCNN(nn.Module):
 
         # Concatenate output of k1, s1, k1.5, and s1.5
         cvk1_dense_batch = torch.cat([cvk1b_batch, cvs1_batch, cvk15_batch, cvs15_batch], dim=1)
-        print(cvk1_dense_batch.shape)
 
         # Apply the k2 convolution layers
         cvk2a_batch = func.relu(self.convk2a_normed(self.convk2a(cvk1_dense_batch)))
@@ -302,7 +301,6 @@ class baselineCNN(nn.Module):
 
         #Apply the 3rd wavelet transform
         cvk05_batch = func.relu(self.convk05_normed(self.convk05(torch.unsqueeze(cvk00_batch[:,0,:,:], dim=1))))
-        print(cvk00_batch.shape)
 
         # Apply the k2.5 convolution layers
         cvk25a_batch = func.relu(self.convk25a_normed(self.convk25a(cvk05_batch)))
@@ -312,6 +310,10 @@ class baselineCNN(nn.Module):
         cvs25_batch = func.relu(self.convs25_normed(self.convs25(cvk05_batch)))
 
         # Concatenate output of k2, s2, k2.5, and s2.5
+        print(cvk2b_batch.shape)
+        print(cvs2_batch.shape)
+        print(cvk25b_batch.shape)
+        print(cvs25_batch.shape)
         cvk2_dense_batch = torch.cat([cvk2b_batch, cvs2_batch, cvk25b_batch, cvs25_batch], dim=1)
 
         cvk3a_batch = func.relu(self.convk3a_normed(self.convk3a(cvk2_dense_batch)))
