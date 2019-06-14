@@ -1,5 +1,5 @@
 config = {
-    'model_name': "WaveletCNN",
+    'model_name': "BaselineCNN",
     'wvlt_transform': 'db1',
     'num_epochs':  20,
     'batch_size': 8,
