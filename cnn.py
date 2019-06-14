@@ -310,10 +310,6 @@ class baselineCNN(nn.Module):
         cvs25_batch = func.relu(self.convs25_normed(self.convs25(cvk05_batch)))
 
         # Concatenate output of k2, s2, k2.5, and s2.5
-        print(cvk2b_batch.shape)
-        print(cvs2_batch.shape)
-        print(cvk25b_batch.shape)
-        print(cvs25_batch.shape)
         cvk2_dense_batch = torch.cat([cvk2b_batch, cvs2_batch, cvk25b_batch, cvs25_batch], dim=1)
 
         cvk3a_batch = func.relu(self.convk3a_normed(self.convk3a(cvk2_dense_batch)))
